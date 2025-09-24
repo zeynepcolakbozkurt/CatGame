@@ -1,6 +1,8 @@
 
 using UnityEngine;
 
+using UnityEngine;
+
 public class CatClick : MonoBehaviour
 {
     private bool isFound = false;
@@ -11,15 +13,17 @@ public class CatClick : MonoBehaviour
         {
             isFound = true;
 
-            // rengi değiştir
+            // Kedinin rengini değiştir
             GetComponent<SpriteRenderer>().color = Color.red;
 
             // CatManager'a bildir
             CatManager.Instance.CatFound();
+
+            // GameManager'daki counter'ı güncelle
+            GameManager.Instance?.FoundCat();//her kedi bulunduğunda counter artıyor
         }
     }
 }
-
    /* private Image catImage; // the real visible cat sprite
       private bool isClicked = false;
 
