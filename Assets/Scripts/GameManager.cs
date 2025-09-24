@@ -23,21 +23,18 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // Eski Coroutine ve sayıları temizle
         if (countdownText != null) countdownText.text = "";
         StopAllCoroutines();
     }
 
     void Start()
     {
-        // CatManager’dan leveldaki aktif kedi sayısını al
         if (CatManager.Instance != null)
             totalCatsToFind = CatManager.Instance.catsToShow;
 
         UpdateCounterText();
     }
 
-    // Her kedi bulunduğunda çağrılır
     public void FoundCat()
     {
         foundCount++;
@@ -74,27 +71,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
-private IEnumerator GameWinSequence()
-{
-    // 1. Mesaj: Bravo!
-    ShowMessage("Bravo! Bütün kedileri buldun!");
-    if (countdownText != null)
-        countdownText.text = ""; // countdown text temiz
-    yield return new WaitForSeconds(2f);
+    private IEnumerator GameWinSequence()
+    {
+        // 1. Mesaj: Bravo!
+        ShowMessage("Bravo! Bütün kedileri buldun!");
+        if (countdownText != null) countdownText.text = "";
+        yield return new WaitForSeconds(2f);
 
-    // 2. Mesaj: Yeni Bölüm Yükleniyor...
-    ShowMessage("Yeni Bölüm Yükleniyor..."); // ShowMessage artık sadece messageText değil
-    if (countdownText != null)
-        countdownText.text = ""; // countdownText artık boş
-    yield return new WaitForSeconds(2f);
+        // 2. Mesaj: Yeni Bölüm Yükleniyor...
+        ShowMessage("Yeni Bölüm Yükleniyor...");
+        if (countdownText != null) countdownText.text = "";
+        yield return new WaitForSeconds(2f);
 
-    // 3. Next level kaydet ve MainMenu
-    int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
-    PlayerPrefs.SetInt("LastLevel", nextIndex);
-    PlayerPrefs.Save();
+        // Sonraki level kaydet
+        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        PlayerPrefs.SetInt("LastLevel", nextIndex);
+        PlayerPrefs.Save();
 
-    SceneManager.LoadScene("MainMenu");
-}
+        SceneManager.LoadScene("MainMenu");
+    }
 
     private IEnumerator GameOverSequence()
     {
@@ -104,9 +99,14 @@ private IEnumerator GameWinSequence()
         yield return new WaitForSeconds(2f);
 
         // 2. Mesaj: Menüye dönülüyor...
-        ShowMessage("");
-        if (countdownText != null) countdownText.text = "Menüye Dönülüyor...";
+        ShowMessage("Menüye Dönülüyor...");
+        if (countdownText != null) countdownText.text = "";
         yield return new WaitForSeconds(2f);
+
+        // Game Over olunan leveli kaydet
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        PlayerPrefs.SetInt("LastLevel", currentLevel);
+        PlayerPrefs.Save();
 
         SceneManager.LoadScene("MainMenu");
     }

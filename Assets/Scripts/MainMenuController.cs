@@ -9,7 +9,7 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         int lastLevel = PlayerPrefs.GetInt("LastLevel", 1);
-        if(levelText != null)
+        if (levelText != null)
             levelText.text = "Level " + lastLevel;
     }
 
